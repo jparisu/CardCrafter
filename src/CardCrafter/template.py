@@ -89,8 +89,10 @@ class Template:
             raise ValueError(f"Template resolution must be positive: {self.resolution}")
 
         # Validate all features
-        for feature in self.features:
+        for i, feature in enumerate(self.features):
             try:
                 feature.validate()
             except ValueError as e:
-                raise ValueError(f"Invalid feature '{feature.name}': {e}") from e
+                # Use feature name if accessible, otherwise use index
+                feature_name = getattr(feature, "name", f"at index {i}")
+                raise ValueError(f"Invalid feature '{feature_name}': {e}") from e

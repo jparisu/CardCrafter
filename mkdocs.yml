@@ -1,0 +1,40 @@
+site_name: CardCrafter Documentation
+site_description: Scheduler for agenda and tasks orchestration via YAML
+site_author: jparisu
+site_url: https://jparisu.github.io/CardCrafter
+
+repo_name: jparisu/CardCrafter
+repo_url: https://github.com/jparisu/CardCrafter
+
+theme:
+  name: readthedocs
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths:
+          - src
+          options:
+            docstring_style: google
+            show_source: true
+  - awesome-pages
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.details
+  - admonition
+  - toc:
+      permalink: true
+  - attr_list
+  - md_in_html
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/jparisu/CardCrafter

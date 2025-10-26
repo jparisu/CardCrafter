@@ -1,0 +1,193 @@
+@startuml
+title Card Generator — Core Structure
+
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+
+' ==== Value Objects & Enums ====
+class BBox {
+  +x:int
+  +y:int
+  +w:int
+  +h:int
+}
+
+enum Anchor {
+  TopLeft
+  Top
+  TopRight
+  Left
+  Center
+  Right
+  BottomLeft
+  Bottom
+  BottomRight
+  Bleed
+}
+
+enum Align {
+    Left
+    Center
+    Right
+}
+
+enum FitMode {
+    Cover
+    Contain
+    ScaleDown
+}
+
+enum Unit {
+    Px
+    Pt
+    Mm
+}
+
+class Resolution {
+  +width:int
+  +height:int
+  +aspect():String
+}
+
+' ==== Styles ====
+abstract class Style {
+  +color:String
+  +opacity:float
+}
+
+class TextStyle extends Style {
+  +fontPath:String
+  +fontSize:int
+  +lineHeight:float
+  +align:Align
+  +wrap:boolean
+  +ellipsis:boolean
+  +strokeColor:String
+  +strokeWidth:int
+  +letterSpacing:float
+}
+
+class ImageStyle extends Style {
+  +fit:FitMode
+  +radius:int
+  +tint:String
+  +contrast:float
+  +brightness:float
+}
+
+' ==== Features ====
+abstract class Feature {
+  +id:String
+  +name:String
+  +layer:int
+  +anchor:Anchor
+  +bbox:BBox
+  +enabled:boolean
+  #validate():void
+  #layout(canvasW:int, canvasH:int):BBox
+  {abstract} +render(ctx:RenderContext):void
+}
+
+class TextFeature extends Feature {
+  +textKey:String           ' key to fetch text from row/config
+  +fallbackText:String
+  +style:TextStyle
+}
+
+class ImageFeature extends Feature {
+  +imageKey:String          ' key/path/URL from row/config
+  +fallbackImage:String
+  +style:ImageStyle
+}
+
+' ==== Template ====
+class Template {
+  +name:String
+  +resolution:Resolution
+  +dpi:int
+  +safeMargin:int
+  +bleed:int
+  +features:List<Feature>
+  +getFeaturesByLayer():List<Feature>
+  +validate():void
+}
+
+Template "1" o-- "1..*" Feature : contains
+Feature --> BBox
+Feature --> Anchor
+TextStyle --> Align
+ImageStyle --> FitMode
+
+TextFeature --> TextStyle
+ImageFeature --> ImageStyle
+Template --> Resolution
+
+' ==== Rendering / Config ====
+class RenderContext {
+  +canvasW:int
+  +canvasH:int
+  +dpi:int
+  +backend:String           ' e.g., "Pillow"
+  +resources:ResourceCache
+  +drawImage(img, x, y, w, h, radius)
+  +drawText(text, bbox, TextStyle)
+}
+
+class ResourceCache {
+  +getFont(path, size):Font
+  +getImage(path):Image
+}
+
+class CardData {
+  ' A simple key/value map built from CSV/YAML
+  +values:Map<String, String>
+  +get(key:String):String
+}
+
+class CardConfig {
+  +globalStyles:Map<String, Style>
+  +tokens:Map<String, String>     ' e.g., colors, font aliases
+}
+
+class CardRenderer {
+  +render(template:Template, data:CardData, cfg:CardConfig):RenderedImage
+  -composeLayers(features:List<Feature>):void
+  -resolveValue(key:String, data:CardData, fallback:String):String
+}
+
+CardRenderer --> RenderContext
+CardRenderer --> Template
+CardRenderer --> CardData
+CardRenderer --> CardConfig
+RenderContext --> ResourceCache
+
+' ==== Output ====
+class RenderedImage {
+  +width:int
+  +height:int
+  +savePng(path:String):void
+  +savePdf(path:String):void
+}
+
+CardRenderer --> RenderedImage
+
+' ==== Notes ====
+note right of Template
+- Features are drawn in ascending "layer"
+- Resolution may be 3:4, 12:15, etc.
+- dpi + bleed/safeMargin for print
+end note
+
+note bottom of Feature
+- bbox is in pixels (or normalized upstream)
+- anchor helps align within bbox
+- render() uses resolved data values
+end note
+
+note bottom of CardRenderer
+Given a Template and a CardData (row),
+it resolves feature values and renders
+a single card image.
+end note
+
+@enduml

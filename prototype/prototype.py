@@ -94,7 +94,11 @@ class TextFeature(Feature):
         logging.debug(f"Drawing TextFeature with text '{value}' at {shape}")
 
         # Draw the text on the image
-        font = ImageFont.truetype("DejaVuSans.ttf", self.style.font_size)
+        try:
+            font = ImageFont.truetype("DejaVuSans.ttf", self.style.font_size)
+        except OSError:
+            logging.warning("DejaVuSans.ttf not found. Falling back to default font.")
+            font = ImageFont.load_default()
         draw.text(shape[0], value, font=font, fill=self.style.font_color, anchor=self.style.alignment)
 
 

@@ -1,0 +1,55 @@
+
+features:
+
+  title:
+    type: text
+    top_left: [0,0]
+    bottom_right: [0.1,1]
+    layer: 2
+    style:
+      font_size: 30
+      font_color: "#000000"
+      alignment: "center"
+
+  subtitle:
+    type: text
+    top_left: [0.1,0]
+    bottom_right: [0.3,1]
+    layer: 2
+    style:
+      font_size: 18
+      font_color: "#333333"
+      alignment: "left"
+
+  background:
+    layer: 0
+    type: color
+    top_left: [0,0]
+    bottom_right: [1,1]
+
+  img:
+    layer: 1
+    type: image
+    top_left: [0.35,0.1]
+    bottom_right: [0.9,0.9]
+    style:
+      crop: true
+      resize: false
+
+decks:
+    - name: "Sample Deck"
+      width: 750
+      height: 1050
+
+      cards:
+
+        - title: "Sample Card 1"
+          subtitle: "This is the first sample card."
+          img: "../resources/images/flags/usa.png"
+          color: "#FFDDCC"
+
+        - title: "Sample Card 2"
+          subtitle: "This is the second sample card without image."
+
+        - subtitle: "This is the third sample card without title."
+          img: "../resources/images/flags/un.png"

@@ -1,34 +1,30 @@
-
 from __future__ import annotations
-from dataclasses import dataclass
-from abc import ABC, abstractmethod
-import os
-from PIL import Image, ImageDraw, ImageFont, ImageColor
-from typing import Any
+
 import logging
+import os
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from typing import Any
+
+from PIL import Image, ImageColor, ImageDraw, ImageFont
+
 
 class Feature(ABC):
-
-    def __init__(
-            self,
-            layer: int,
-            top_left: tuple[float, float],
-            bottom_right: tuple[float, float]
-    ):
+    def __init__(self, layer: int, top_left: tuple[float, float], bottom_right: tuple[float, float]):
         self.layer = layer
         self.top_left = top_left
         self.bottom_right = bottom_right
 
     @abstractmethod
     def render(
-            self,
-            value: Any,
-            canvas: Image.Image,
-            draw: ImageDraw.ImageDraw,
-    ):
+        self,
+        value: Any,
+        canvas: Image.Image,
+        draw: ImageDraw.ImageDraw,
+    ) -> None:
         pass
 
-    def _calculate_own_shape(self, canvas_shape: tuple[int, int]):
+    def _calculate_own_shape(self, canvas_shape: tuple[float, float]) -> tuple[tuple[int, int], tuple[int, int]]:
         canvas_width, canvas_height = canvas_shape
         own_top_left_x = int(self.top_left[0] * canvas_width)
         own_top_left_y = int(self.top_left[1] * canvas_height)
@@ -37,32 +33,29 @@ class Feature(ABC):
         return ((own_top_left_x, own_top_left_y), (own_bottom_right_x, own_bottom_right_y))
 
 
-
 class ColorFeature(Feature):
-
     def __init__(
-            self,
-            layer: int,
-            top_left: tuple[int, int],
-            bottom_right: tuple[int, int],
+        self,
+        layer: int,
+        top_left: tuple[float, float],
+        bottom_right: tuple[float, float],
     ):
         super().__init__(layer, top_left, bottom_right)
 
-
     def render(
-            self,
-            value: Any,
-            canvas: Image.Image,
-            draw: ImageDraw.ImageDraw,
-    ):
+        self,
+        value: Any,
+        canvas: Image.Image,
+        draw: ImageDraw.ImageDraw,
+    ) -> None:
         # Check if the value is a string
         if not isinstance(value, str):
             raise ValueError("Value must be a string representing a color for ColorFeature.")
         # Check if the value is a valid color
         try:
             ImageColor.getrgb(value)
-        except ValueError:
-            raise ValueError(f"Value '{value}' is not a valid color string for ColorFeature.")
+        except ValueError as err:
+            raise ValueError(f"Value '{value}' is not a valid color string for ColorFeature.") from err
 
         # Calculate shape
         shape = self._calculate_own_shape(canvas.size)
@@ -73,7 +66,6 @@ class ColorFeature(Feature):
         draw.rectangle(shape, fill=value)
 
 
-
 @dataclass
 class TextStyle:
     font_size: int
@@ -82,24 +74,16 @@ class TextStyle:
 
 
 class TextFeature(Feature):
-
-    def __init__(
-            self,
-            layer: int,
-            top_left: tuple[int, int],
-            bottom_right: tuple[int, int],
-            style: TextStyle
-    ):
+    def __init__(self, layer: int, top_left: tuple[float, float], bottom_right: tuple[float, float], style: TextStyle):
         super().__init__(layer, top_left, bottom_right)
         self.style = style
 
-
     def render(
-            self,
-            value: Any,
-            canvas: Image.Image,
-            draw: ImageDraw.ImageDraw,
-    ):
+        self,
+        value: Any,
+        canvas: Image.Image,
+        draw: ImageDraw.ImageDraw,
+    ) -> None:
         # Check if the value is a string
         if not isinstance(value, str):
             raise ValueError("Value must be a string for TextFeature.")
@@ -111,13 +95,7 @@ class TextFeature(Feature):
 
         # Draw the text on the image
         font = ImageFont.truetype("DejaVuSans.ttf", self.style.font_size)
-        draw.text(
-            shape[0],
-            value,
-            font=font,
-            fill=self.style.font_color,
-            anchor=self.style.alignment
-        )
+        draw.text(shape[0], value, font=font, fill=self.style.font_color, anchor=self.style.alignment)
 
 
 @dataclass
@@ -128,22 +106,21 @@ class ImageStyle:
 
 class ImageFeature(Feature):
     def __init__(
-            self,
-            layer: int,
-            top_left: tuple[int, int],
-            bottom_right: tuple[int, int],
-            style: ImageStyle,
+        self,
+        layer: int,
+        top_left: tuple[float, float],
+        bottom_right: tuple[float, float],
+        style: ImageStyle,
     ):
         super().__init__(layer, top_left, bottom_right)
         self.style = style
 
-
     def render(
-            self,
-            value: Any,
-            canvas: Image.Image,
-            draw: ImageDraw.ImageDraw,
-    ):
+        self,
+        value: Any,
+        canvas: Image.Image,
+        draw: ImageDraw.ImageDraw,
+    ) -> None:
         # Check if the value is a string
         if not isinstance(value, str):
             raise ValueError("Value must be a string for ImageFeature.")
@@ -167,33 +144,19 @@ class ImageFeature(Feature):
         canvas.paste(img, shape[0])
 
 
-
 class Card:
-
-    def __init__(
-            self,
-            width: int,
-            height: int,
-            features: dict[str, Feature]
-    ):
+    def __init__(self, width: int, height: int, features: dict[str, Feature]):
         self.width = width
         self.height = height
         self.features = features
 
-    def render(
-            self,
-            configuration: dict[str, any],
-            result_path: str
-    ):
+    def render(self, configuration: dict[str, Any], result_path: str) -> None:
         # Create a blank canvas
-        canvas = Image.new('RGBA', (self.width, self.height), (255, 255, 255, 0))
+        canvas = Image.new("RGBA", (self.width, self.height), (255, 255, 255, 0))
         draw = ImageDraw.Draw(canvas)
 
         # Sort features by layer
-        sorted_features = sorted(
-            self.features.items(),
-            key=lambda item: item[1].layer
-        )
+        sorted_features = sorted(self.features.items(), key=lambda item: item[1].layer)
 
         # Render each feature
         for feature_name, feature in sorted_features:
@@ -208,7 +171,6 @@ logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 
 if __name__ == "__main__":
-
     # Set debug logging level
     logging.basicConfig(level=logging.DEBUG)
 
@@ -217,30 +179,18 @@ if __name__ == "__main__":
         width=400,
         height=600,
         features={
-            "background": ColorFeature(
-                layer=0,
-                top_left=(0.0, 0.0),
-                bottom_right=(1.0, 1.0)
-            ),
+            "background": ColorFeature(layer=0, top_left=(0.0, 0.0), bottom_right=(1.0, 1.0)),
             "title": TextFeature(
                 layer=2,
                 top_left=(0, 0),
                 bottom_right=(0.1, 1),
-                style=TextStyle(
-                    font_size=40,
-                    font_color="black",
-                    alignment="lt"
-                )
+                style=TextStyle(font_size=40, font_color="black", alignment="lt"),
             ),
             "subtitle": TextFeature(
                 layer=2,
                 top_left=(0.0, 0.1),
                 bottom_right=(0.2, 1),
-                style=TextStyle(
-                    font_size=20,
-                    font_color="black",
-                    alignment="lt"
-                )
+                style=TextStyle(font_size=20, font_color="black", alignment="lt"),
             ),
             "image": ImageFeature(
                 layer=1,
@@ -249,9 +199,9 @@ if __name__ == "__main__":
                 style=ImageStyle(
                     crop=False,
                     resize=True,
-                )
-            )
-        }
+                ),
+            ),
+        },
     )
 
     configuration = {

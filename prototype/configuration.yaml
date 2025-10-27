@@ -43,13 +43,13 @@ decks:
 
       cards:
 
-        - title: "Sample Card 1",
-          subtitle: "This is the first sample card.",
+        - title: "Sample Card 1"
+          subtitle: "This is the first sample card."
           img: "../resources/images/flags/usa.png"
           color: "#FFDDCC"
 
-        - title: "Sample Card 2",
-          subtitle: "This is the second sample card without image.",
+        - title: "Sample Card 2"
+          subtitle: "This is the second sample card without image."
 
-        - subtitle: "This is the third sample card without title.",
+        - subtitle: "This is the third sample card without title."
           img: "../resources/images/flags/un.png"

@@ -1,193 +1,181 @@
 @startuml
-title Card Generator — Core Structure
 
-skinparam classAttributeIconSize 0
-skinparam shadowing false
+package "positioning" #LightBlue {
 
-' ==== Value Objects & Enums ====
-class BBox {
-  +x:int
-  +y:int
-  +w:int
-  +h:int
+    interface Measure {
+        + absolute(total: AbsoluteMeasure): AbsoluteMeasure
+    }
+
+    class AbsoluteMeasure {
+        - mm: float
+        ---
+        + from_cm(value: float): AbsoluteMeasure
+        + from_pixels(value: int, dpi: float): AbsoluteMeasure
+        ---
+        + to_mm(): float
+        + to_cm(): float
+        + to_pixels(dpi: float): int
+        ---
+        + absolute(total: AbsoluteMeasure): AbsoluteMeasure
+    }
+
+    AbsoluteMeasure --|> Measure
+
+    class RelativeMeasure {
+        - proportion: float
+        + absolute(total: AbsoluteMeasure): AbsoluteMeasure
+    }
+
+    RelativeMeasure --|> Measure
+
+    class Size {
+        - width: Measure
+        - height: Measure
+        + absolute(size: AbsoluteSize): AbsoluteSize
+    }
+
+    class AbsoluteSize {
+        + width: AbsoluteMeasure
+        + height: AbsoluteMeasure
+        + absolute(size: AbsoluteSize): AbsoluteSize
+    }
+
+    AbsoluteSize --|> Size
+
+    class Position {
+        + layer: int
+        ' From top-left
+        - x: Measure
+        - y: Measure
+        - size: Size
+        + absolute(size: AbsoluteSize): AbsolutePosition
+    }
+
+    class AbsolutePosition {
+        + x: AbsoluteMeasure
+        + y: AbsoluteMeasure
+        + size: AbsoluteSize
+        + absolute(size: AbsoluteSize): AbsolutePosition
+    }
+
+    AbsolutePosition --|> Position
+
 }
 
-enum Anchor {
-  TopLeft
-  Top
-  TopRight
-  Left
-  Center
-  Right
-  BottomLeft
-  Bottom
-  BottomRight
-  Bleed
+package "styling" #LightPink {
+
+    class Color {
+        - hex : String
+        + from_rgb(r: int, g: int, b: int): Color
+        + from_hex(hex: String): Color
+        + from_name(name: String): Color
+        ---
+        + to_rgb(): (int, int, int)
+        + to_hex(): String
+    }
+
+    enum TextAlignment {
+        LEFT
+        CENTER
+        RIGHT
+    }
+
+    enum TextFormatting {
+        PLAIN
+        MARKDOWN
+    }
+
+    class FontStyle {
+        + font_name: String
+        + font_size: int
+    }
+
+    enum LineStyle {
+        NONE
+        SOLID
+        DASHED
+        DOTTED
+    }
+
+    enum Shape {
+        RECTANGLE
+        ' TODO: add other shapes
+    }
+
+    class BorderStyle {
+        - color: Color
+        - width: Measure
+        - style: LineStyle
+    }
+
+    enum ImageFormatting {
+        CROP
+        RESCALE
+    }
+
 }
 
-enum Align {
-    Left
-    Center
-    Right
+package featuring #LightGreen {
+
+    class Feature {
+        - name: String
+        - description: String
+        - position: Position
+        + generate_element(value: T): Element
+    }
+
+    ' Feature *-- "1" Position
+
+    class TextFeature {
+        - font: FontStyle
+        - formatting: TextFormatting
+        - alignment: TextAlignment
+    }
+
+    TextFeature --|> Feature
+
+    class GraphicalFeature {
+        - shape: Shape
+        - border: BorderStyle
+    }
+
+    GraphicalFeature --|> Feature
+
+    class ImageFeature {
+        - image_path: String
+        - formatting: ImageFormatting
+    }
+
+    ImageFeature --|> GraphicalFeature
+
+    class ColorFeature {
+        - color: Color
+    }
+
+    ColorFeature --|> GraphicalFeature
+
 }
 
-enum FitMode {
-    Cover
-    Contain
-    ScaleDown
+package "carding" #LightYellow {
+
+    class Element {
+        - feature: Feature
+        - value: T
+        + render(position: AbsolutePosition)
+    }
+
+    class Card {
+        - List<Element> elements
+    }
+
+    class Deck {
+        - width: Measure
+        - height: Measure
+        - Dict<str, Feature> features
+        - List<Card> cards
+        - repetitions: int
+    }
+
 }
-
-enum Unit {
-    Px
-    Pt
-    Mm
-}
-
-class Resolution {
-  +width:int
-  +height:int
-  +aspect():String
-}
-
-' ==== Styles ====
-abstract class Style {
-  +color:String
-  +opacity:float
-}
-
-class TextStyle extends Style {
-  +fontPath:String
-  +fontSize:int
-  +lineHeight:float
-  +align:Align
-  +wrap:boolean
-  +ellipsis:boolean
-  +strokeColor:String
-  +strokeWidth:int
-  +letterSpacing:float
-}
-
-class ImageStyle extends Style {
-  +fit:FitMode
-  +radius:int
-  +tint:String
-  +contrast:float
-  +brightness:float
-}
-
-' ==== Features ====
-abstract class Feature {
-  +id:String
-  +name:String
-  +layer:int
-  +anchor:Anchor
-  +bbox:BBox
-  +enabled:boolean
-  #validate():void
-  #layout(canvasW:int, canvasH:int):BBox
-  {abstract} +render(ctx:RenderContext):void
-}
-
-class TextFeature extends Feature {
-  +textKey:String           ' key to fetch text from row/config
-  +fallbackText:String
-  +style:TextStyle
-}
-
-class ImageFeature extends Feature {
-  +imageKey:String          ' key/path/URL from row/config
-  +fallbackImage:String
-  +style:ImageStyle
-}
-
-' ==== Template ====
-class Template {
-  +name:String
-  +resolution:Resolution
-  +dpi:int
-  +safeMargin:int
-  +bleed:int
-  +features:List<Feature>
-  +getFeaturesByLayer():List<Feature>
-  +validate():void
-}
-
-Template "1" o-- "1..*" Feature : contains
-Feature --> BBox
-Feature --> Anchor
-TextStyle --> Align
-ImageStyle --> FitMode
-
-TextFeature --> TextStyle
-ImageFeature --> ImageStyle
-Template --> Resolution
-
-' ==== Rendering / Config ====
-class RenderContext {
-  +canvasW:int
-  +canvasH:int
-  +dpi:int
-  +backend:String           ' e.g., "Pillow"
-  +resources:ResourceCache
-  +drawImage(img, x, y, w, h, radius)
-  +drawText(text, bbox, TextStyle)
-}
-
-class ResourceCache {
-  +getFont(path, size):Font
-  +getImage(path):Image
-}
-
-class CardData {
-  ' A simple key/value map built from CSV/YAML
-  +values:Map<String, String>
-  +get(key:String):String
-}
-
-class CardConfig {
-  +globalStyles:Map<String, Style>
-  +tokens:Map<String, String>     ' e.g., colors, font aliases
-}
-
-class CardRenderer {
-  +render(template:Template, data:CardData, cfg:CardConfig):RenderedImage
-  -composeLayers(features:List<Feature>):void
-  -resolveValue(key:String, data:CardData, fallback:String):String
-}
-
-CardRenderer --> RenderContext
-CardRenderer --> Template
-CardRenderer --> CardData
-CardRenderer --> CardConfig
-RenderContext --> ResourceCache
-
-' ==== Output ====
-class RenderedImage {
-  +width:int
-  +height:int
-  +savePng(path:String):void
-  +savePdf(path:String):void
-}
-
-CardRenderer --> RenderedImage
-
-' ==== Notes ====
-note right of Template
-- Features are drawn in ascending "layer"
-- Resolution may be 3:4, 12:15, etc.
-- dpi + bleed/safeMargin for print
-end note
-
-note bottom of Feature
-- bbox is in pixels (or normalized upstream)
-- anchor helps align within bbox
-- render() uses resolved data values
-end note
-
-note bottom of CardRenderer
-Given a Template and a CardData (row),
-it resolves feature values and renders
-a single card image.
-end note
 
 @enduml

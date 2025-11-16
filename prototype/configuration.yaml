@@ -3,8 +3,9 @@ features:
 
   title:
     type: text
-    top_left: [0,0]
-    bottom_right: [0.1,1]
+    position:
+      top_left: [0,0]
+      bottom_right: [0.1,1]
     layer: 2
     style:
       font_size: 30
@@ -13,8 +14,9 @@ features:
 
   subtitle:
     type: text
-    top_left: [0.1,0]
-    bottom_right: [0.3,1]
+    position:
+      top_left: [0.1,0]
+      bottom_right: [0.3,1]
     layer: 2
     style:
       font_size: 18
@@ -24,14 +26,23 @@ features:
   background:
     layer: 0
     type: color
-    top_left: [0,0]
-    bottom_right: [1,1]
+    position:
+      alignment: top_left
+      horizontal_offset: 0
+      vertical_offset: 0
+      horizontal_size: 1
+      vertical_size: 1
+    default: "../resources/images/flags/background.png"
 
   img:
     layer: 1
     type: image
-    top_left: [0.35,0.1]
-    bottom_right: [0.9,0.9]
+    position:
+      alignment: center
+      horizontal_offset: 0.1
+      vertical_offset: 0
+      horizontal_size: 0.5
+      vertical_size: 0.8
     style:
       crop: true
       resize: false

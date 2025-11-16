@@ -349,11 +349,11 @@ class AbsoluteMeasure(Measure):
             TypeError: If other is not a Measure instance.
         """
         if isinstance(other, RelativeMeasure):
-            return AbsoluteMeasure(self.mm + other.absolute(self).mm)
+            return AbsoluteMeasure(self.to_mm() + other.absolute(self).to_mm())
         elif isinstance(other, AbsoluteMeasure):
-            if self._unit == other.unit:
+            if self._unit == other._unit:
                 return AbsoluteMeasure(self._value + other._value, self._unit)
             else:
-                return AbsoluteMeasure(value=self.mm + other.mm, unit=MeasureUnit.MM)
+                return AbsoluteMeasure(value=self.to_mm() + other.to_mm(), unit=MeasureUnit.MM)
         else:
             raise TypeError("Can only add AbsoluteMeasure to AbsoluteMeasure or RelativeMeasure")

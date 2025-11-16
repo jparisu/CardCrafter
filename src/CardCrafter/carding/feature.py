@@ -12,6 +12,7 @@ from CardCrafter.positioning.position import Position
 from CardCrafter.positioning.size import AbsoluteSize
 from CardCrafter.styling.text import TextStyle
 from CardCrafter.rendering.element import Element, TextElement, ImageElement
+from CardCrafter.styling.image import ImageStyle
 
 E = TypeVar('ElementType')
 S = TypeVar('StyleType')
@@ -187,7 +188,7 @@ class TextFeature(Feature):
             raise TypeError(f"Expected value of type str, got {type(value)}")
 
         return TextElement(
-            position=self.position.to_absolute(size),
+            position=self.position.absolute(size),
             text=value,
             style=self.style,
         )
@@ -202,6 +203,7 @@ class ImageFeature(Feature):
             name: str,
             position: Position,
             description: str = "",
+            style: ImageStyle = ImageStyle(),
             ):
         """
         Initialize an image feature.
@@ -210,8 +212,20 @@ class ImageFeature(Feature):
             name: The unique name of this feature.
             position: The position where the image should appear.
             description: An optional description of the feature.
+            style: The image styling to apply (default: default ImageStyle).
         """
         super().__init__(name, position, description)
+        self._style = style
+
+    @property
+    def style(self) -> ImageStyle:
+        """
+        Gets the image style.
+        
+        Returns:
+            The image styling configuration.
+        """
+        return self._style
 
     def generate_element(
             self,
@@ -237,6 +251,7 @@ class ImageFeature(Feature):
             raise TypeError(f"Expected value of type str, got {type(value)}")
 
         return ImageElement(
-            position=self.position.to_absolute(size),
+            position=self.position.absolute(size),
             image_path=value,
+            style=self.style,
         )

@@ -7,20 +7,20 @@ for both relative and absolute positioning.
 
 from __future__ import annotations
 
-from CardCrafter.positioning.measure import Measure, AbsoluteMeasure, RelativeMeasure
+from CardCrafter.positioning.measure import AbsoluteMeasure, Measure
 
 
 class Point:
     """
     Represents a point in 2D space with x and y coordinates.
-    
+
     The coordinates can be either absolute or relative measurements.
     """
 
     def __init__(self, x: Measure, y: Measure):
         """
         Initialize a 2D point.
-        
+
         Args:
             x: The x-coordinate as a Measure.
             y: The y-coordinate as a Measure.
@@ -31,11 +31,11 @@ class Point:
     def absolute(self, reference: AbsolutePoint) -> AbsolutePoint:
         """
         Converts the Point to absolute measurements.
-        
+
         Args:
             reference: The reference point to use for converting relative measurements.
                       For relative coordinates, this defines the reference dimensions.
-        
+
         Returns:
             An AbsolutePoint with all coordinates in absolute measurements.
         """
@@ -47,18 +47,18 @@ class Point:
 class AbsolutePoint(Point):
     """
     Represents a point in 2D space with absolute coordinates.
-    
+
     Both x and y coordinates must be AbsoluteMeasure instances.
     """
 
     def __init__(self, x: AbsoluteMeasure, y: AbsoluteMeasure):
         """
         Initialize an absolute 2D point.
-        
+
         Args:
             x: The x-coordinate as an AbsoluteMeasure.
             y: The y-coordinate as an AbsoluteMeasure.
-        
+
         Raises:
             TypeError: If x or y are not AbsoluteMeasure instances.
         """
@@ -71,7 +71,7 @@ class AbsolutePoint(Point):
     def x(self) -> AbsoluteMeasure:
         """
         Gets the x-coordinate.
-        
+
         Returns:
             The x-coordinate as an AbsoluteMeasure.
         """
@@ -81,7 +81,7 @@ class AbsolutePoint(Point):
     def y(self) -> AbsoluteMeasure:
         """
         Gets the y-coordinate.
-        
+
         Returns:
             The y-coordinate as an AbsoluteMeasure.
         """
@@ -90,7 +90,7 @@ class AbsolutePoint(Point):
     def to_tuple(self) -> tuple[int, int]:
         """
         Converts the point to a tuple of pixel coordinates.
-        
+
         Returns:
             A tuple (x, y) with coordinates in pixels as integers.
         """

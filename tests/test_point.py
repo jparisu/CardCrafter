@@ -3,8 +3,9 @@ Unit tests for the positioning.point module.
 """
 
 import pytest
-from CardCrafter.positioning.point import Point, AbsolutePoint
-from CardCrafter.positioning.measure import AbsoluteMeasure, RelativeMeasure, MeasureUnit
+
+from CardCrafter.positioning.measure import AbsoluteMeasure, MeasureUnit, RelativeMeasure
+from CardCrafter.positioning.point import AbsolutePoint, Point
 
 
 class Test_Point:
@@ -23,10 +24,10 @@ class Test_Point:
         x = RelativeMeasure(0.5)
         y = RelativeMeasure(0.3)
         point = Point(x, y)
-        
+
         reference = AbsoluteMeasure(100, MeasureUnit.MM)
         abs_point = point.absolute(reference)
-        
+
         assert isinstance(abs_point, AbsolutePoint)
         assert abs_point.x._value == 50
         assert abs_point.y._value == 30

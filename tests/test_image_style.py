@@ -2,7 +2,6 @@
 Unit tests for the styling.image module.
 """
 
-import pytest
 from CardCrafter.styling.image import ImageFormatting, ImageStyle
 
 

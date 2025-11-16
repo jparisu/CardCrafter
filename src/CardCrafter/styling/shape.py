@@ -9,10 +9,11 @@ from enum import Enum
 
 from CardCrafter.styling.color import Color
 
+
 class Shape(Enum):
     """
     Enumeration of supported shape types.
-    
+
     Attributes:
         RECTANGLE: A rectangular shape.
     """
@@ -22,7 +23,7 @@ class Shape(Enum):
 class LineStyle(Enum):
     """
     Enumeration of line styling options for borders.
-    
+
     Attributes:
         SOLID: A solid continuous line.
         DASHED: A dashed line.
@@ -36,7 +37,7 @@ class LineStyle(Enum):
 class BorderStyle:
     """
     Represents the styling for a border.
-    
+
     Defines the visual appearance of borders including color, width, and line style.
     """
 
@@ -48,7 +49,7 @@ class BorderStyle:
     ):
         """
         Initialize a border style.
-        
+
         Args:
             color: The color of the border.
             width: The width of the border in pixels.
@@ -63,7 +64,7 @@ class BorderStyle:
     def color(self) -> Color:
         """
         Gets the border color.
-        
+
         Returns:
             The border color.
         """
@@ -73,7 +74,7 @@ class BorderStyle:
     def width(self) -> int:
         """
         Gets the border width.
-        
+
         Returns:
             The border width in pixels.
         """
@@ -83,7 +84,7 @@ class BorderStyle:
     def line_style(self) -> LineStyle:
         """
         Gets the line style of the border.
-        
+
         Returns:
             The line style.
         """

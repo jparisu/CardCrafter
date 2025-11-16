@@ -19,7 +19,7 @@ COLORS = {
 class Color:
     """
     Represents a color with support for multiple representations.
-    
+
     Colors can be created from RGB values, hexadecimal strings, or predefined names.
     """
 
@@ -29,7 +29,7 @@ class Color:
     ):
         """
         Initialize a color from a hexadecimal string.
-        
+
         Args:
             hex: The color in hexadecimal format (e.g., "#ff0000" for red).
         """
@@ -47,12 +47,12 @@ class Color:
     ) -> "Color":
         """
         Creates a Color from RGB values.
-        
+
         Args:
             r: Red component (0-255).
             g: Green component (0-255).
             b: Blue component (0-255).
-        
+
         Returns:
             A new Color instance.
         """
@@ -66,10 +66,10 @@ class Color:
     ) -> "Color":
         """
         Creates a Color from a hexadecimal string.
-        
+
         Args:
             hex: The color in hexadecimal format (e.g., "#ff0000").
-        
+
         Returns:
             A new Color instance.
         """
@@ -82,13 +82,13 @@ class Color:
     ) -> "Color":
         """
         Creates a Color from a predefined color name.
-        
+
         Args:
             name: The name of a predefined color (case-insensitive).
-        
+
         Returns:
             A new Color instance.
-        
+
         Raises:
             ValueError: If the color name is not defined.
         """
@@ -106,7 +106,7 @@ class Color:
     def to_rgb(self) -> tuple[int, int, int]:
         """
         Converts the color to RGB format.
-        
+
         Returns:
             A tuple (r, g, b) with values from 0 to 255.
         """
@@ -119,7 +119,7 @@ class Color:
     def to_hex(self) -> str:
         """
         Gets the color in hexadecimal format.
-        
+
         Returns:
             The color as a hexadecimal string (e.g., "#ff0000").
         """
@@ -132,7 +132,7 @@ class Color:
     ):
         """
         Defines a new named color or updates an existing one.
-        
+
         Args:
             name: The name for the color (case-insensitive).
             hex: The color in hexadecimal format.

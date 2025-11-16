@@ -5,16 +5,16 @@ This module provides a concrete canvas implementation using the Python Imaging L
 for rendering text and images.
 """
 
-from PIL import Image, ImageDraw, ImageFont, ImageColor
 import logging
-from abc import ABC, abstractmethod
+
+from PIL import Image, ImageDraw, ImageFont
 
 from CardCrafter.positioning.size import AbsoluteSize
-from CardCrafter.rendering.element import TextElement, ImageElement
-from CardCrafter.styling.text import TextAlignment
-from CardCrafter.styling.image import ImageFormatting
-from CardCrafter.styling.color import Color
 from CardCrafter.rendering.canvas import Canvas
+from CardCrafter.rendering.element import ImageElement, TextElement
+from CardCrafter.styling.color import Color
+from CardCrafter.styling.image import ImageFormatting
+from CardCrafter.styling.text import TextAlignment
 
 logger = logging.getLogger(__name__)
 
@@ -22,10 +22,10 @@ logger = logging.getLogger(__name__)
 def _alignment_to_anchor(alignment: TextAlignment) -> str:
     """
     Converts a TextAlignment to PIL anchor string.
-    
+
     Args:
         alignment: The text alignment to convert.
-    
+
     Returns:
         A PIL anchor string ('lt' for left, 'mt' for center, 'rt' for right).
     """
@@ -40,10 +40,10 @@ def _alignment_to_anchor(alignment: TextAlignment) -> str:
 def _color_to_pil(color: Color) -> str:
     """
     Converts a Color to PIL color format.
-    
+
     Args:
         color: The color to convert.
-    
+
     Returns:
         A hexadecimal color string suitable for PIL.
     """
@@ -54,7 +54,7 @@ def _color_to_pil(color: Color) -> str:
 class Canvas_PIL(Canvas):
     """
     Canvas implementation using PIL/Pillow for rendering.
-    
+
     This canvas creates an RGBA image and provides methods to add text and images.
     """
 
@@ -64,7 +64,7 @@ class Canvas_PIL(Canvas):
     ):
         """
         Initialize a PIL canvas.
-        
+
         Args:
             size: The absolute size of the canvas.
         """
@@ -79,7 +79,7 @@ class Canvas_PIL(Canvas):
     ) -> None:
         """
         Saves the canvas to a file.
-        
+
         Args:
             filepath: The path where the canvas image should be saved.
         """
@@ -100,7 +100,7 @@ class Canvas_PIL(Canvas):
     ) -> None:
         """
         Adds a text element to the canvas.
-        
+
         Args:
             element: The text element to render.
         """
@@ -133,7 +133,7 @@ class Canvas_PIL(Canvas):
     ) -> None:
         """
         Adds an image element to the canvas.
-        
+
         Args:
             element: The image element to render.
         """

@@ -3,12 +3,13 @@ Unit tests for the carding.feature module.
 """
 
 import pytest
-from CardCrafter.carding.feature import Feature, TextFeature, ImageFeature
-from CardCrafter.rendering.element import TextElement, ImageElement
-from CardCrafter.positioning.position import Position
-from CardCrafter.positioning.point import Point
-from CardCrafter.positioning.size import Size, AbsoluteSize
+
+from CardCrafter.carding.feature import Feature, ImageFeature, TextFeature
 from CardCrafter.positioning.measure import AbsoluteMeasure, MeasureUnit
+from CardCrafter.positioning.point import Point
+from CardCrafter.positioning.position import Position
+from CardCrafter.positioning.size import AbsoluteSize, Size
+from CardCrafter.rendering.element import ImageElement, TextElement
 from CardCrafter.styling.text import TextStyle
 
 
@@ -24,7 +25,7 @@ class Test_Feature:
         height = AbsoluteMeasure(30, MeasureUnit.MM)
         size = Size(width, height)
         position = Position(point, size)
-        
+
         with pytest.raises(TypeError):
             Feature("name", position)
 
@@ -41,7 +42,7 @@ class Test_TextFeature:
         height = AbsoluteMeasure(30, MeasureUnit.MM)
         size = Size(width, height)
         position = Position(point, size)
-        
+
         feature = TextFeature("title", position)
         assert feature._name == "title"
         assert feature._position == position
@@ -57,7 +58,7 @@ class Test_TextFeature:
         height = AbsoluteMeasure(30, MeasureUnit.MM)
         size = Size(width, height)
         position = Position(point, size)
-        
+
         feature = TextFeature("title", position, description="Card title")
         assert feature.description == "Card title"
 
@@ -70,7 +71,7 @@ class Test_TextFeature:
         height = AbsoluteMeasure(30, MeasureUnit.MM)
         size = Size(width, height)
         position = Position(point, size)
-        
+
         style = TextStyle(font_size=24)
         feature = TextFeature("title", position, style=style)
         assert feature.style == style
@@ -84,7 +85,7 @@ class Test_TextFeature:
         height = AbsoluteMeasure(30, MeasureUnit.MM)
         size = Size(width, height)
         position = Position(point, size)
-        
+
         feature = TextFeature("test_name", position)
         assert feature.name == "test_name"
 
@@ -97,7 +98,7 @@ class Test_TextFeature:
         height = AbsoluteMeasure(30, MeasureUnit.MM)
         size = Size(width, height)
         position = Position(point, size)
-        
+
         feature = TextFeature("title", position)
         assert feature.position == position
 
@@ -110,7 +111,7 @@ class Test_TextFeature:
         height = AbsoluteMeasure(30, MeasureUnit.MM)
         size = Size(width, height)
         position = Position(point, size)
-        
+
         feature = TextFeature("title", position, description="Test description")
         assert feature.description == "Test description"
 
@@ -123,7 +124,7 @@ class Test_TextFeature:
         height = AbsoluteMeasure(30, MeasureUnit.MM)
         size = Size(width, height)
         position = Position(point, size)
-        
+
         style = TextStyle(font_size=18)
         feature = TextFeature("title", position, style=style)
         assert feature.style == style
@@ -137,13 +138,13 @@ class Test_TextFeature:
         height = AbsoluteMeasure(30, MeasureUnit.MM)
         size = Size(width, height)
         position = Position(point, size)
-        
+
         feature = TextFeature("title", position)
-        
+
         card_width = AbsoluteMeasure(100, MeasureUnit.MM)
         card_height = AbsoluteMeasure(150, MeasureUnit.MM)
         card_size = AbsoluteSize(card_width, card_height)
-        
+
         element = feature.generate_element(card_size, "Test Text")
         assert isinstance(element, TextElement)
         assert element.text == "Test Text"
@@ -157,13 +158,13 @@ class Test_TextFeature:
         height = AbsoluteMeasure(30, MeasureUnit.MM)
         size = Size(width, height)
         position = Position(point, size)
-        
+
         feature = TextFeature("title", position)
-        
+
         card_width = AbsoluteMeasure(100, MeasureUnit.MM)
         card_height = AbsoluteMeasure(150, MeasureUnit.MM)
         card_size = AbsoluteSize(card_width, card_height)
-        
+
         with pytest.raises(TypeError, match="Expected value of type str"):
             feature.generate_element(card_size, 123)
 
@@ -176,13 +177,13 @@ class Test_TextFeature:
         height = AbsoluteMeasure(30, MeasureUnit.MM)
         size = Size(width, height)
         position = Position(point, size)
-        
+
         feature = TextFeature("title", position)
-        
+
         card_width = AbsoluteMeasure(100, MeasureUnit.MM)
         card_height = AbsoluteMeasure(150, MeasureUnit.MM)
         card_size = AbsoluteSize(card_width, card_height)
-        
+
         result = feature.default(card_size)
         assert result is None
 
@@ -195,14 +196,14 @@ class Test_TextFeature:
         height = AbsoluteMeasure(30, MeasureUnit.MM)
         size = Size(width, height)
         position = Position(point, size)
-        
+
         feature = TextFeature("title", position)
         feature.set_default(value="Default Title")
-        
+
         card_width = AbsoluteMeasure(100, MeasureUnit.MM)
         card_height = AbsoluteMeasure(150, MeasureUnit.MM)
         card_size = AbsoluteSize(card_width, card_height)
-        
+
         result = feature.default(card_size)
         assert isinstance(result, TextElement)
         assert result.text == "Default Title"
@@ -220,7 +221,7 @@ class Test_ImageFeature:
         height = AbsoluteMeasure(30, MeasureUnit.MM)
         size = Size(width, height)
         position = Position(point, size)
-        
+
         feature = ImageFeature("icon", position)
         assert feature._name == "icon"
         assert feature._position == position
@@ -235,7 +236,7 @@ class Test_ImageFeature:
         height = AbsoluteMeasure(30, MeasureUnit.MM)
         size = Size(width, height)
         position = Position(point, size)
-        
+
         feature = ImageFeature("icon", position, description="Card icon")
         assert feature.description == "Card icon"
 
@@ -248,13 +249,13 @@ class Test_ImageFeature:
         height = AbsoluteMeasure(30, MeasureUnit.MM)
         size = Size(width, height)
         position = Position(point, size)
-        
+
         feature = ImageFeature("icon", position)
-        
+
         card_width = AbsoluteMeasure(100, MeasureUnit.MM)
         card_height = AbsoluteMeasure(150, MeasureUnit.MM)
         card_size = AbsoluteSize(card_width, card_height)
-        
+
         element = feature.generate_element(card_size, "/path/to/image.png")
         assert isinstance(element, ImageElement)
         assert element.image_path == "/path/to/image.png"
@@ -268,12 +269,12 @@ class Test_ImageFeature:
         height = AbsoluteMeasure(30, MeasureUnit.MM)
         size = Size(width, height)
         position = Position(point, size)
-        
+
         feature = ImageFeature("icon", position)
-        
+
         card_width = AbsoluteMeasure(100, MeasureUnit.MM)
         card_height = AbsoluteMeasure(150, MeasureUnit.MM)
         card_size = AbsoluteSize(card_width, card_height)
-        
+
         with pytest.raises(TypeError, match="Expected value of type str"):
             feature.generate_element(card_size, 123)

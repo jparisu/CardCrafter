@@ -3,8 +3,9 @@ Unit tests for the positioning.size module.
 """
 
 import pytest
-from CardCrafter.positioning.size import Size, AbsoluteSize
-from CardCrafter.positioning.measure import AbsoluteMeasure, RelativeMeasure, MeasureUnit
+
+from CardCrafter.positioning.measure import AbsoluteMeasure, MeasureUnit, RelativeMeasure
+from CardCrafter.positioning.size import AbsoluteSize, Size
 
 
 class Test_Size:
@@ -23,13 +24,13 @@ class Test_Size:
         width = RelativeMeasure(0.5)
         height = RelativeMeasure(0.3)
         size = Size(width, height)
-        
+
         reference_width = AbsoluteMeasure(100, MeasureUnit.MM)
         reference_height = AbsoluteMeasure(200, MeasureUnit.MM)
         reference = AbsoluteSize(reference_width, reference_height)
-        
+
         abs_size = size.absolute(reference)
-        
+
         assert isinstance(abs_size, AbsoluteSize)
         assert abs_size.width._value == 50
         assert abs_size.height._value == 60

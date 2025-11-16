@@ -2,16 +2,15 @@
 Unit tests for the carding.card module.
 """
 
-import pytest
-from unittest.mock import Mock, MagicMock
+from unittest.mock import Mock
+
 from CardCrafter.carding.card import Card
-from CardCrafter.rendering.element import TextElement, ImageElement
-from CardCrafter.positioning.position import AbsolutePosition
-from CardCrafter.positioning.point import AbsolutePoint
-from CardCrafter.positioning.size import AbsoluteSize
 from CardCrafter.positioning.measure import AbsoluteMeasure, MeasureUnit
+from CardCrafter.positioning.point import AbsolutePoint
+from CardCrafter.positioning.position import AbsolutePosition
+from CardCrafter.positioning.size import AbsoluteSize
+from CardCrafter.rendering.element import TextElement
 from CardCrafter.styling.text import TextStyle
-from CardCrafter.styling.image import ImageStyle
 
 
 class Test_Card:
@@ -22,7 +21,7 @@ class Test_Card:
         width = AbsoluteMeasure(100, MeasureUnit.MM)
         height = AbsoluteMeasure(150, MeasureUnit.MM)
         size = AbsoluteSize(width, height)
-        
+
         elements = []
         card = Card(size, elements)
         assert card._size == size
@@ -33,7 +32,7 @@ class Test_Card:
         width = AbsoluteMeasure(100, MeasureUnit.MM)
         height = AbsoluteMeasure(150, MeasureUnit.MM)
         size = AbsoluteSize(width, height)
-        
+
         x = AbsoluteMeasure(10, MeasureUnit.MM)
         y = AbsoluteMeasure(20, MeasureUnit.MM)
         point = AbsolutePoint(x, y)
@@ -41,10 +40,10 @@ class Test_Card:
         elem_height = AbsoluteMeasure(30, MeasureUnit.MM)
         elem_size = AbsoluteSize(elem_width, elem_height)
         position = AbsolutePosition(point, elem_size)
-        
+
         element = TextElement(position, "Test", TextStyle())
         elements = [element]
-        
+
         card = Card(size, elements)
         assert len(card._elements) == 1
         assert card._elements[0] == element
@@ -54,7 +53,7 @@ class Test_Card:
         width = AbsoluteMeasure(100, MeasureUnit.MM)
         height = AbsoluteMeasure(150, MeasureUnit.MM)
         size = AbsoluteSize(width, height)
-        
+
         card = Card(size, [])
         canvas = Mock()
         card.render(canvas)
@@ -65,7 +64,7 @@ class Test_Card:
         width = AbsoluteMeasure(100, MeasureUnit.MM)
         height = AbsoluteMeasure(150, MeasureUnit.MM)
         size = AbsoluteSize(width, height)
-        
+
         x = AbsoluteMeasure(10, MeasureUnit.MM)
         y = AbsoluteMeasure(20, MeasureUnit.MM)
         point = AbsolutePoint(x, y)
@@ -73,13 +72,13 @@ class Test_Card:
         elem_height = AbsoluteMeasure(30, MeasureUnit.MM)
         elem_size = AbsoluteSize(elem_width, elem_height)
         position = AbsolutePosition(point, elem_size)
-        
+
         element = TextElement(position, "Test", TextStyle())
         card = Card(size, [element])
-        
+
         canvas = Mock()
         card.render(canvas)
-        
+
         # Element should call canvas.add_text via its render method
         canvas.add_text.assert_called_once()
 
@@ -88,7 +87,7 @@ class Test_Card:
         width = AbsoluteMeasure(100, MeasureUnit.MM)
         height = AbsoluteMeasure(150, MeasureUnit.MM)
         size = AbsoluteSize(width, height)
-        
+
         # Create elements with different layers
         x = AbsoluteMeasure(10, MeasureUnit.MM)
         y = AbsoluteMeasure(20, MeasureUnit.MM)
@@ -96,26 +95,26 @@ class Test_Card:
         elem_width = AbsoluteMeasure(50, MeasureUnit.MM)
         elem_height = AbsoluteMeasure(30, MeasureUnit.MM)
         elem_size = AbsoluteSize(elem_width, elem_height)
-        
-        position1 = AbsolutePosition(point, elem_size, layer=2)
-        position2 = AbsolutePosition(point, elem_size, layer=0)
-        position3 = AbsolutePosition(point, elem_size, layer=1)
-        
+
+        AbsolutePosition(point, elem_size, layer=2)
+        AbsolutePosition(point, elem_size, layer=0)
+        AbsolutePosition(point, elem_size, layer=1)
+
         element1 = Mock(layer=2)
         element1.render = Mock()
-        
+
         element2 = Mock(layer=0)
         element2.render = Mock()
-        
+
         element3 = Mock(layer=1)
         element3.render = Mock()
-        
+
         # Add in unsorted order
         card = Card(size, [element1, element2, element3])
-        
+
         canvas = Mock()
         card.render(canvas)
-        
+
         # Check that render was called on all elements
         element1.render.assert_called_once_with(canvas)
         element2.render.assert_called_once_with(canvas)

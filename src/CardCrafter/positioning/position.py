@@ -7,15 +7,15 @@ combining a point location with a size and an optional layer.
 
 from __future__ import annotations
 
-from CardCrafter.positioning.measure import Measure, AbsoluteMeasure
-from CardCrafter.positioning.size import Size, AbsoluteSize
-from CardCrafter.positioning.point import Point, AbsolutePoint
+from CardCrafter.positioning.measure import AbsoluteMeasure, Measure
+from CardCrafter.positioning.point import AbsolutePoint, Point
+from CardCrafter.positioning.size import AbsoluteSize
 
 
 class Position:
     """
     Represents a 2D position of an element with location, size, and layer.
-    
+
     This combines a point (x, y coordinates), a size (width, height),
     and an optional layer value for z-ordering.
     """
@@ -28,7 +28,7 @@ class Position:
     ):
         """
         Initialize a position.
-        
+
         Args:
             point: The top-left corner point of the element.
             size: The size of the element.
@@ -42,10 +42,10 @@ class Position:
     def absolute(self, reference: AbsoluteSize) -> AbsolutePosition:
         """
         Converts the position to absolute measurements.
-        
+
         Args:
             reference: The reference size to use for converting relative measurements.
-        
+
         Returns:
             An AbsolutePosition with all measurements in absolute values.
         """
@@ -57,7 +57,7 @@ class Position:
     def layer(self) -> int:
         """
         Gets the layer (z-order) of the position.
-        
+
         Returns:
             The layer as an integer.
         """
@@ -67,7 +67,7 @@ class Position:
 class AbsolutePosition(Position):
     """
     Represents a 2D position with absolute measurements.
-    
+
     All measurements (point coordinates and size) are in absolute units.
     """
     def __init__(
@@ -78,12 +78,12 @@ class AbsolutePosition(Position):
     ):
         """
         Initialize an absolute position.
-        
+
         Args:
             point: The top-left corner as an AbsolutePoint.
             size: The size as an AbsoluteSize.
             layer: The z-order layer (higher values appear on top). Default is 0.
-        
+
         Raises:
             TypeError: If point or size are not absolute instances.
         """
@@ -96,7 +96,7 @@ class AbsolutePosition(Position):
     def x(self) -> AbsoluteMeasure:
         """
         Gets the x-coordinate of the position.
-        
+
         Returns:
             The x-coordinate as an AbsoluteMeasure.
         """
@@ -106,7 +106,7 @@ class AbsolutePosition(Position):
     def y(self) -> AbsoluteMeasure:
         """
         Gets the y-coordinate of the position.
-        
+
         Returns:
             The y-coordinate as an AbsoluteMeasure.
         """
@@ -116,7 +116,7 @@ class AbsolutePosition(Position):
     def size(self) -> AbsoluteSize:
         """
         Gets the size of the positioned element.
-        
+
         Returns:
             The size as an AbsoluteSize.
         """
@@ -126,7 +126,7 @@ class AbsolutePosition(Position):
     def width(self) -> AbsoluteMeasure:
         """
         Gets the width of the positioned element.
-        
+
         Returns:
             The width as an AbsoluteMeasure.
         """
@@ -136,7 +136,7 @@ class AbsolutePosition(Position):
     def height(self) -> AbsoluteMeasure:
         """
         Gets the height of the positioned element.
-        
+
         Returns:
             The height as an AbsoluteMeasure.
         """
@@ -146,7 +146,7 @@ class AbsolutePosition(Position):
     def start_corner(self) -> AbsolutePoint:
         """
         Gets the top-left corner point of the position.
-        
+
         Returns:
             The top-left corner as an AbsolutePoint.
         """
@@ -155,7 +155,7 @@ class AbsolutePosition(Position):
     def to_box(self) -> tuple[int, int, int, int]:
         """
         Converts the position to a bounding box in pixels.
-        
+
         Returns:
             A tuple (x1, y1, x2, y2) representing the box coordinates in pixels,
             where (x1, y1) is the top-left corner and (x2, y2) is the bottom-right corner.

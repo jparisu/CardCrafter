@@ -3,7 +3,8 @@ Unit tests for the styling.color module.
 """
 
 import pytest
-from CardCrafter.styling.color import Color, COLORS
+
+from CardCrafter.styling.color import COLORS, Color
 
 
 class Test_Color:
@@ -75,7 +76,7 @@ class Test_Color:
         Color.define_color("custom", "#123456")
         assert "custom" in COLORS
         assert COLORS["custom"] == "#123456"
-        
+
         # Create color from newly defined name
         color = Color.from_name("custom")
         assert color.to_hex() == "#123456"

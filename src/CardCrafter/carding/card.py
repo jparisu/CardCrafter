@@ -7,16 +7,16 @@ with its elements to be rendered.
 
 import logging
 
-from CardCrafter.rendering.element import Element
 from CardCrafter.positioning.size import AbsoluteSize
 from CardCrafter.rendering.canvas import Canvas
+from CardCrafter.rendering.element import Element
 
 logger = logging.getLogger(__name__)
 
 class Card:
     """
     Represents a single card with its renderable elements.
-    
+
     A card is a composition of elements (text, images, etc.) positioned
     on a canvas of a specific size.
     """
@@ -28,7 +28,7 @@ class Card:
     ):
         """
         Initialize a card.
-        
+
         Args:
             size: The absolute size of the card.
             elements: The list of elements to render on the card.
@@ -43,10 +43,10 @@ class Card:
     ) -> None:
         """
         Renders all card elements onto a canvas.
-        
+
         Elements are rendered in order of their layer (z-order),
         with lower layer values rendered first.
-        
+
         Args:
             canvas: The canvas to render onto.
         """

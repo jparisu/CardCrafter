@@ -10,9 +10,9 @@ from typing import TypeVar
 
 from CardCrafter.positioning.position import Position
 from CardCrafter.positioning.size import AbsoluteSize
-from CardCrafter.styling.text import TextStyle
-from CardCrafter.rendering.element import Element, TextElement, ImageElement
+from CardCrafter.rendering.element import ImageElement, TextElement
 from CardCrafter.styling.image import ImageStyle
+from CardCrafter.styling.text import TextStyle
 
 E = TypeVar('ElementType')
 S = TypeVar('StyleType')
@@ -20,7 +20,7 @@ S = TypeVar('StyleType')
 class Feature(ABC):
     """
     Abstract base class for card features.
-    
+
     Features define placeholders for content that can appear on cards,
     such as text fields or image slots.
     """
@@ -33,7 +33,7 @@ class Feature(ABC):
             ):
         """
         Initialize a feature.
-        
+
         Args:
             name: The unique name of this feature.
             position: The position where this feature should appear.
@@ -51,7 +51,7 @@ class Feature(ABC):
     def name(self) -> str:
         """
         Gets the feature name.
-        
+
         Returns:
             The feature name as a string.
         """
@@ -61,7 +61,7 @@ class Feature(ABC):
     def position(self) -> Position:
         """
         Gets the feature position.
-        
+
         Returns:
             The position where this feature appears.
         """
@@ -71,7 +71,7 @@ class Feature(ABC):
     def description(self) -> str:
         """
         Gets the feature description.
-        
+
         Returns:
             The feature description as a string.
         """
@@ -85,11 +85,11 @@ class Feature(ABC):
     ) -> E:
         """
         Generates a renderable element from a value.
-        
+
         Args:
             size: The absolute size reference for positioning.
             value: The value to render (type depends on feature type).
-        
+
         Returns:
             A renderable element.
         """
@@ -102,10 +102,10 @@ class Feature(ABC):
     ) -> E:
         """
         Generates the default element for this feature.
-        
+
         Args:
             size: The absolute size reference for positioning.
-        
+
         Returns:
             A renderable element if a default is set, None otherwise.
         """
@@ -120,7 +120,7 @@ class Feature(ABC):
     def set_default(self, *args, **kwargs) -> None:
         """
         Sets the default value for this feature.
-        
+
         Args:
             *args: Positional arguments for generate_element.
             **kwargs: Keyword arguments for generate_element.
@@ -144,7 +144,7 @@ class TextFeature(Feature):
             ):
         """
         Initialize a text feature.
-        
+
         Args:
             name: The unique name of this feature.
             position: The position where text should appear.
@@ -158,7 +158,7 @@ class TextFeature(Feature):
     def style(self) -> TextStyle:
         """
         Gets the text style.
-        
+
         Returns:
             The text styling configuration.
         """
@@ -171,14 +171,14 @@ class TextFeature(Feature):
     ) -> TextElement:
         """
         Generates a text element from a string value.
-        
+
         Args:
             size: The absolute size reference for positioning.
             value: The text string to display.
-        
+
         Returns:
             A TextElement ready to be rendered.
-        
+
         Raises:
             TypeError: If value is not a string.
         """
@@ -207,7 +207,7 @@ class ImageFeature(Feature):
             ):
         """
         Initialize an image feature.
-        
+
         Args:
             name: The unique name of this feature.
             position: The position where the image should appear.
@@ -221,7 +221,7 @@ class ImageFeature(Feature):
     def style(self) -> ImageStyle:
         """
         Gets the image style.
-        
+
         Returns:
             The image styling configuration.
         """
@@ -234,14 +234,14 @@ class ImageFeature(Feature):
     ) -> ImageElement:
         """
         Generates an image element from an image path.
-        
+
         Args:
             size: The absolute size reference for positioning.
             value: The path to the image file.
-        
+
         Returns:
             An ImageElement ready to be rendered.
-        
+
         Raises:
             TypeError: If value is not a string.
         """

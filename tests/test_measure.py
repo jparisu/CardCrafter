@@ -3,11 +3,11 @@ Unit tests for the positioning.measure module.
 """
 
 import pytest
+
 from CardCrafter.positioning.measure import (
-    Measure,
     AbsoluteMeasure,
-    RelativeMeasure,
     MeasureUnit,
+    RelativeMeasure,
 )
 
 

@@ -3,10 +3,11 @@ Unit tests for the positioning.position module.
 """
 
 import pytest
-from CardCrafter.positioning.position import Position, AbsolutePosition
-from CardCrafter.positioning.point import Point, AbsolutePoint
-from CardCrafter.positioning.size import Size, AbsoluteSize
-from CardCrafter.positioning.measure import AbsoluteMeasure, RelativeMeasure, MeasureUnit
+
+from CardCrafter.positioning.measure import AbsoluteMeasure, MeasureUnit, RelativeMeasure
+from CardCrafter.positioning.point import AbsolutePoint, Point
+from CardCrafter.positioning.position import AbsolutePosition, Position
+from CardCrafter.positioning.size import AbsoluteSize, Size
 
 
 class Test_Position:
@@ -20,7 +21,7 @@ class Test_Position:
         width = AbsoluteMeasure(100, MeasureUnit.MM)
         height = AbsoluteMeasure(200, MeasureUnit.MM)
         size = Size(width, height)
-        
+
         position = Position(point, size, layer=5)
         assert position._point == point
         assert position._size == size
@@ -34,7 +35,7 @@ class Test_Position:
         width = AbsoluteMeasure(100, MeasureUnit.MM)
         height = AbsoluteMeasure(200, MeasureUnit.MM)
         size = Size(width, height)
-        
+
         position = Position(point, size)
         assert position._layer == 0
 
@@ -46,7 +47,7 @@ class Test_Position:
         width = AbsoluteMeasure(100, MeasureUnit.MM)
         height = AbsoluteMeasure(200, MeasureUnit.MM)
         size = Size(width, height)
-        
+
         position = Position(point, size, layer=3)
         assert position.layer == 3
 
@@ -62,7 +63,7 @@ class Test_AbsolutePosition:
         width = AbsoluteMeasure(100, MeasureUnit.MM)
         height = AbsoluteMeasure(200, MeasureUnit.MM)
         size = AbsoluteSize(width, height)
-        
+
         position = AbsolutePosition(point, size, layer=2)
         assert position._point == point
         assert position._size == size
@@ -76,7 +77,7 @@ class Test_AbsolutePosition:
         width = AbsoluteMeasure(100, MeasureUnit.MM)
         height = AbsoluteMeasure(200, MeasureUnit.MM)
         size = AbsoluteSize(width, height)
-        
+
         with pytest.raises(TypeError):
             AbsolutePosition(point, size)
 
@@ -88,7 +89,7 @@ class Test_AbsolutePosition:
         width = RelativeMeasure(0.5)
         height = RelativeMeasure(0.3)
         size = Size(width, height)
-        
+
         with pytest.raises(TypeError):
             AbsolutePosition(point, size)
 
@@ -100,7 +101,7 @@ class Test_AbsolutePosition:
         width = AbsoluteMeasure(100, MeasureUnit.MM)
         height = AbsoluteMeasure(200, MeasureUnit.MM)
         size = AbsoluteSize(width, height)
-        
+
         position = AbsolutePosition(point, size)
         assert position.x == x
 
@@ -112,7 +113,7 @@ class Test_AbsolutePosition:
         width = AbsoluteMeasure(100, MeasureUnit.MM)
         height = AbsoluteMeasure(200, MeasureUnit.MM)
         size = AbsoluteSize(width, height)
-        
+
         position = AbsolutePosition(point, size)
         assert position.y == y
 
@@ -124,7 +125,7 @@ class Test_AbsolutePosition:
         width = AbsoluteMeasure(100, MeasureUnit.MM)
         height = AbsoluteMeasure(200, MeasureUnit.MM)
         size = AbsoluteSize(width, height)
-        
+
         position = AbsolutePosition(point, size)
         assert position.size == size
 
@@ -136,7 +137,7 @@ class Test_AbsolutePosition:
         width = AbsoluteMeasure(100, MeasureUnit.MM)
         height = AbsoluteMeasure(200, MeasureUnit.MM)
         size = AbsoluteSize(width, height)
-        
+
         position = AbsolutePosition(point, size)
         assert position.width == width
 
@@ -148,7 +149,7 @@ class Test_AbsolutePosition:
         width = AbsoluteMeasure(100, MeasureUnit.MM)
         height = AbsoluteMeasure(200, MeasureUnit.MM)
         size = AbsoluteSize(width, height)
-        
+
         position = AbsolutePosition(point, size)
         assert position.height == height
 
@@ -160,7 +161,7 @@ class Test_AbsolutePosition:
         width = AbsoluteMeasure(100, MeasureUnit.MM)
         height = AbsoluteMeasure(200, MeasureUnit.MM)
         size = AbsoluteSize(width, height)
-        
+
         position = AbsolutePosition(point, size)
         assert position.start_corner() == point
 
@@ -172,7 +173,7 @@ class Test_AbsolutePosition:
         width = AbsoluteMeasure(25.4, MeasureUnit.MM)  # 96 pixels
         height = AbsoluteMeasure(50.8, MeasureUnit.MM)  # 192 pixels
         size = AbsoluteSize(width, height)
-        
+
         position = AbsolutePosition(point, size)
         box = position.to_box()
         assert box == (96, 96, 192, 288)  # (x1, y1, x2, y2)

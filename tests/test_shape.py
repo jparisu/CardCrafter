@@ -2,9 +2,8 @@
 Unit tests for the styling.shape module.
 """
 
-import pytest
-from CardCrafter.styling.shape import Shape, LineStyle, BorderStyle
 from CardCrafter.styling.color import Color
+from CardCrafter.styling.shape import BorderStyle, LineStyle, Shape
 
 
 class Test_Shape:

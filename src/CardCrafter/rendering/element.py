@@ -5,19 +5,19 @@ This module provides abstract and concrete element classes that can be
 rendered onto a canvas, including text and image elements.
 """
 
-from abc import ABC, abstractmethod
 import logging
+from abc import ABC, abstractmethod
 
 from CardCrafter.positioning.position import AbsolutePosition
-from CardCrafter.styling.text import TextStyle
 from CardCrafter.styling.image import ImageStyle
+from CardCrafter.styling.text import TextStyle
 
 logger = logging.getLogger(__name__)
 
 class Element(ABC):
     """
     Abstract base class for renderable elements.
-    
+
     Elements are objects that can be rendered onto a canvas at a specific position.
     """
 
@@ -27,7 +27,7 @@ class Element(ABC):
             ):
         """
         Initialize an element.
-        
+
         Args:
             position: The absolute position where the element should be rendered.
         """
@@ -37,7 +37,7 @@ class Element(ABC):
     def position(self) -> AbsolutePosition:
         """
         Gets the position of the element.
-        
+
         Returns:
             The absolute position of this element.
         """
@@ -47,7 +47,7 @@ class Element(ABC):
     def layer(self) -> int:
         """
         Gets the layer (z-order) of the element.
-        
+
         Returns:
             The layer as an integer.
         """
@@ -60,7 +60,7 @@ class Element(ABC):
     ) -> None:
         """
         Renders this element onto a canvas.
-        
+
         Args:
             canvas: The canvas to render onto.
         """
@@ -70,7 +70,7 @@ class Element(ABC):
 class TextElement(Element):
     """
     Represents a text element that can be rendered.
-    
+
     Combines text content with styling and positioning information.
     """
 
@@ -82,7 +82,7 @@ class TextElement(Element):
     ):
         """
         Initialize a text element.
-        
+
         Args:
             position: The absolute position for the text.
             text: The text content to render.
@@ -96,7 +96,7 @@ class TextElement(Element):
     def style(self) -> TextStyle:
         """
         Gets the text style.
-        
+
         Returns:
             The text styling configuration.
         """
@@ -106,7 +106,7 @@ class TextElement(Element):
     def text(self) -> str:
         """
         Gets the text content.
-        
+
         Returns:
             The text string to render.
         """
@@ -119,7 +119,7 @@ class TextElement(Element):
     ) -> None:
         """
         Renders this text element onto the canvas.
-        
+
         Args:
             canvas: The canvas to render onto.
         """
@@ -130,7 +130,7 @@ class TextElement(Element):
 class ImageElement(Element):
     """
     Represents an image element that can be rendered.
-    
+
     Combines an image path with styling and positioning information.
     """
 
@@ -142,7 +142,7 @@ class ImageElement(Element):
     ):
         """
         Initialize an image element.
-        
+
         Args:
             position: The absolute position for the image.
             image_path: The file path to the image to render.
@@ -156,7 +156,7 @@ class ImageElement(Element):
     def image_path(self) -> str:
         """
         Gets the image file path.
-        
+
         Returns:
             The path to the image file.
         """
@@ -166,7 +166,7 @@ class ImageElement(Element):
     def style(self) -> ImageStyle:
         """
         Gets the image style.
-        
+
         Returns:
             The image styling configuration.
         """
@@ -178,7 +178,7 @@ class ImageElement(Element):
     ) -> None:
         """
         Renders this image element onto the canvas.
-        
+
         Args:
             canvas: The canvas to render onto.
         """

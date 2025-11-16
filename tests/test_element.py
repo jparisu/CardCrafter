@@ -2,15 +2,17 @@
 Unit tests for the rendering.element module.
 """
 
+from unittest.mock import Mock
+
 import pytest
-from unittest.mock import Mock, MagicMock
-from CardCrafter.rendering.element import Element, TextElement, ImageElement
-from CardCrafter.positioning.position import AbsolutePosition
-from CardCrafter.positioning.point import AbsolutePoint
-from CardCrafter.positioning.size import AbsoluteSize
+
 from CardCrafter.positioning.measure import AbsoluteMeasure, MeasureUnit
-from CardCrafter.styling.text import TextStyle
+from CardCrafter.positioning.point import AbsolutePoint
+from CardCrafter.positioning.position import AbsolutePosition
+from CardCrafter.positioning.size import AbsoluteSize
+from CardCrafter.rendering.element import Element, ImageElement, TextElement
 from CardCrafter.styling.image import ImageStyle
+from CardCrafter.styling.text import TextStyle
 
 
 class Test_Element:
@@ -25,7 +27,7 @@ class Test_Element:
         height = AbsoluteMeasure(200, MeasureUnit.MM)
         size = AbsoluteSize(width, height)
         position = AbsolutePosition(point, size)
-        
+
         with pytest.raises(TypeError):
             Element(position)
 
@@ -42,10 +44,10 @@ class Test_TextElement:
         height = AbsoluteMeasure(50, MeasureUnit.MM)
         size = AbsoluteSize(width, height)
         position = AbsolutePosition(point, size, layer=1)
-        
+
         style = TextStyle()
         text = "Hello World"
-        
+
         element = TextElement(position, text, style)
         assert element._position == position
         assert element._text == text
@@ -60,7 +62,7 @@ class Test_TextElement:
         height = AbsoluteMeasure(50, MeasureUnit.MM)
         size = AbsoluteSize(width, height)
         position = AbsolutePosition(point, size)
-        
+
         element = TextElement(position, "Test", TextStyle())
         assert element.position == position
 
@@ -73,7 +75,7 @@ class Test_TextElement:
         height = AbsoluteMeasure(50, MeasureUnit.MM)
         size = AbsoluteSize(width, height)
         position = AbsolutePosition(point, size, layer=3)
-        
+
         element = TextElement(position, "Test", TextStyle())
         assert element.layer == 3
 
@@ -86,7 +88,7 @@ class Test_TextElement:
         height = AbsoluteMeasure(50, MeasureUnit.MM)
         size = AbsoluteSize(width, height)
         position = AbsolutePosition(point, size)
-        
+
         style = TextStyle(font_size=24)
         element = TextElement(position, "Test", style)
         assert element.style == style
@@ -100,7 +102,7 @@ class Test_TextElement:
         height = AbsoluteMeasure(50, MeasureUnit.MM)
         size = AbsoluteSize(width, height)
         position = AbsolutePosition(point, size)
-        
+
         text = "Sample Text"
         element = TextElement(position, text, TextStyle())
         assert element.text == text
@@ -114,13 +116,13 @@ class Test_TextElement:
         height = AbsoluteMeasure(50, MeasureUnit.MM)
         size = AbsoluteSize(width, height)
         position = AbsolutePosition(point, size)
-        
+
         element = TextElement(position, "Test", TextStyle())
-        
+
         # Mock canvas
         canvas = Mock()
         element.render(canvas)
-        
+
         canvas.add_text.assert_called_once_with(element)
 
 
@@ -136,10 +138,10 @@ class Test_ImageElement:
         height = AbsoluteMeasure(50, MeasureUnit.MM)
         size = AbsoluteSize(width, height)
         position = AbsolutePosition(point, size, layer=2)
-        
+
         style = ImageStyle()
         image_path = "/path/to/image.png"
-        
+
         element = ImageElement(position, image_path, style)
         assert element._position == position
         assert element._image_path == image_path
@@ -154,7 +156,7 @@ class Test_ImageElement:
         height = AbsoluteMeasure(50, MeasureUnit.MM)
         size = AbsoluteSize(width, height)
         position = AbsolutePosition(point, size)
-        
+
         element = ImageElement(position, "test.png", ImageStyle())
         assert element.position == position
 
@@ -167,7 +169,7 @@ class Test_ImageElement:
         height = AbsoluteMeasure(50, MeasureUnit.MM)
         size = AbsoluteSize(width, height)
         position = AbsolutePosition(point, size, layer=5)
-        
+
         element = ImageElement(position, "test.png", ImageStyle())
         assert element.layer == 5
 
@@ -180,7 +182,7 @@ class Test_ImageElement:
         height = AbsoluteMeasure(50, MeasureUnit.MM)
         size = AbsoluteSize(width, height)
         position = AbsolutePosition(point, size)
-        
+
         image_path = "/path/to/image.jpg"
         element = ImageElement(position, image_path, ImageStyle())
         assert element.image_path == image_path
@@ -194,7 +196,7 @@ class Test_ImageElement:
         height = AbsoluteMeasure(50, MeasureUnit.MM)
         size = AbsoluteSize(width, height)
         position = AbsolutePosition(point, size)
-        
+
         style = ImageStyle()
         element = ImageElement(position, "test.png", style)
         assert element.style == style
@@ -208,11 +210,11 @@ class Test_ImageElement:
         height = AbsoluteMeasure(50, MeasureUnit.MM)
         size = AbsoluteSize(width, height)
         position = AbsolutePosition(point, size)
-        
+
         element = ImageElement(position, "test.png", ImageStyle())
-        
+
         # Mock canvas
         canvas = Mock()
         element.render(canvas)
-        
+
         canvas.add_image.assert_called_once_with(element)

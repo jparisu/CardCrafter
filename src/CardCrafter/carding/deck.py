@@ -6,17 +6,18 @@ and can generate individual cards from feature values.
 """
 
 from __future__ import annotations
+
 from typing import Any
 
-from CardCrafter.carding.feature import Feature
 from CardCrafter.carding.card import Card
+from CardCrafter.carding.feature import Feature
 from CardCrafter.positioning.size import AbsoluteSize
 
 
 class Deck:
     """
     Represents a deck (collection) of cards with shared features.
-    
+
     A deck defines the common structure (features) that all its cards share,
     and can generate individual cards by providing values for those features.
     """
@@ -28,7 +29,7 @@ class Deck:
     ) -> None:
         """
         Initialize a deck.
-        
+
         Args:
             card_size: The absolute size of cards in this deck.
             features: A dictionary mapping feature names to Feature instances.
@@ -42,7 +43,7 @@ class Deck:
     def feature_names(self) -> list[str]:
         """
         Gets the names of all features in this deck.
-        
+
         Returns:
             A list of feature names.
         """
@@ -52,11 +53,11 @@ class Deck:
     def create_card(self, feature_values: dict[str, Any]) -> Card:
         """
         Creates a card by providing values for features.
-        
+
         Args:
             feature_values: A dictionary mapping feature names to their values.
                            Features not in this dict will use their default values if set.
-        
+
         Returns:
             A Card instance with elements generated from the feature values.
         """
@@ -87,7 +88,7 @@ class Deck:
     def add_card(self, card: Card, quantity: int = 1) -> None:
         """
         Adds a card to the deck.
-        
+
         Args:
             card: The card to add.
             quantity: How many copies of this card to add (default: 1).

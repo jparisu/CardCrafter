@@ -2,9 +2,8 @@
 Unit tests for the styling.text module.
 """
 
-import pytest
-from CardCrafter.styling.text import TextAlignment, TextFormatting, TextStyle
 from CardCrafter.styling.color import Color
+from CardCrafter.styling.text import TextAlignment, TextFormatting, TextStyle
 
 
 class Test_TextAlignment:

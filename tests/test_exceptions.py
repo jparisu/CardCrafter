@@ -3,6 +3,7 @@ Unit tests for the yaml_utils.exceptions module.
 """
 
 import pytest
+
 from CardCrafter.yaml_utils.exceptions import (
     YamlFormatError,
     YamlKeyError,

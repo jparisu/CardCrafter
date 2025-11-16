@@ -2,15 +2,13 @@
 Unit tests for the carding.deck module.
 """
 
-import pytest
-from CardCrafter.carding.deck import Deck
 from CardCrafter.carding.card import Card
-from CardCrafter.carding.feature import TextFeature, ImageFeature
-from CardCrafter.positioning.position import Position
-from CardCrafter.positioning.point import Point
-from CardCrafter.positioning.size import Size, AbsoluteSize
+from CardCrafter.carding.deck import Deck
+from CardCrafter.carding.feature import TextFeature
 from CardCrafter.positioning.measure import AbsoluteMeasure, MeasureUnit
-from CardCrafter.styling.text import TextStyle
+from CardCrafter.positioning.point import Point
+from CardCrafter.positioning.position import Position
+from CardCrafter.positioning.size import AbsoluteSize, Size
 
 
 class Test_Deck:
@@ -21,7 +19,7 @@ class Test_Deck:
         width = AbsoluteMeasure(100, MeasureUnit.MM)
         height = AbsoluteMeasure(150, MeasureUnit.MM)
         card_size = AbsoluteSize(width, height)
-        
+
         features = {}
         deck = Deck(card_size, features)
         assert deck._card_size == card_size
@@ -34,7 +32,7 @@ class Test_Deck:
         width = AbsoluteMeasure(100, MeasureUnit.MM)
         height = AbsoluteMeasure(150, MeasureUnit.MM)
         card_size = AbsoluteSize(width, height)
-        
+
         x = AbsoluteMeasure(10, MeasureUnit.MM)
         y = AbsoluteMeasure(20, MeasureUnit.MM)
         point = Point(x, y)
@@ -42,10 +40,10 @@ class Test_Deck:
         feat_height = AbsoluteMeasure(30, MeasureUnit.MM)
         feat_size = Size(feat_width, feat_height)
         position = Position(point, feat_size)
-        
+
         feature = TextFeature("title", position)
         features = {"title": feature}
-        
+
         deck = Deck(card_size, features)
         assert "title" in deck._features
 
@@ -54,7 +52,7 @@ class Test_Deck:
         width = AbsoluteMeasure(100, MeasureUnit.MM)
         height = AbsoluteMeasure(150, MeasureUnit.MM)
         card_size = AbsoluteSize(width, height)
-        
+
         deck = Deck(card_size, {})
         assert deck.feature_names() == []
 
@@ -63,7 +61,7 @@ class Test_Deck:
         width = AbsoluteMeasure(100, MeasureUnit.MM)
         height = AbsoluteMeasure(150, MeasureUnit.MM)
         card_size = AbsoluteSize(width, height)
-        
+
         x = AbsoluteMeasure(10, MeasureUnit.MM)
         y = AbsoluteMeasure(20, MeasureUnit.MM)
         point = Point(x, y)
@@ -71,11 +69,11 @@ class Test_Deck:
         feat_height = AbsoluteMeasure(30, MeasureUnit.MM)
         feat_size = Size(feat_width, feat_height)
         position = Position(point, feat_size)
-        
+
         feature1 = TextFeature("title", position)
         feature2 = TextFeature("description", position)
         features = {"title": feature1, "description": feature2}
-        
+
         deck = Deck(card_size, features)
         names = deck.feature_names()
         assert "title" in names
@@ -87,10 +85,10 @@ class Test_Deck:
         width = AbsoluteMeasure(100, MeasureUnit.MM)
         height = AbsoluteMeasure(150, MeasureUnit.MM)
         card_size = AbsoluteSize(width, height)
-        
+
         deck = Deck(card_size, {})
         card = deck.create_card({})
-        
+
         assert isinstance(card, Card)
         assert len(card._elements) == 0
 
@@ -99,7 +97,7 @@ class Test_Deck:
         width = AbsoluteMeasure(100, MeasureUnit.MM)
         height = AbsoluteMeasure(150, MeasureUnit.MM)
         card_size = AbsoluteSize(width, height)
-        
+
         x = AbsoluteMeasure(10, MeasureUnit.MM)
         y = AbsoluteMeasure(20, MeasureUnit.MM)
         point = Point(x, y)
@@ -107,13 +105,13 @@ class Test_Deck:
         feat_height = AbsoluteMeasure(30, MeasureUnit.MM)
         feat_size = Size(feat_width, feat_height)
         position = Position(point, feat_size)
-        
+
         feature = TextFeature("title", position)
         features = {"title": feature}
-        
+
         deck = Deck(card_size, features)
         card = deck.create_card({"title": "Test Title"})
-        
+
         assert isinstance(card, Card)
         assert len(card._elements) == 1
 
@@ -122,7 +120,7 @@ class Test_Deck:
         width = AbsoluteMeasure(100, MeasureUnit.MM)
         height = AbsoluteMeasure(150, MeasureUnit.MM)
         card_size = AbsoluteSize(width, height)
-        
+
         x = AbsoluteMeasure(10, MeasureUnit.MM)
         y = AbsoluteMeasure(20, MeasureUnit.MM)
         point = Point(x, y)
@@ -130,13 +128,13 @@ class Test_Deck:
         feat_height = AbsoluteMeasure(30, MeasureUnit.MM)
         feat_size = Size(feat_width, feat_height)
         position = Position(point, feat_size)
-        
+
         feature = TextFeature("title", position)
         features = {"title": feature}
-        
+
         deck = Deck(card_size, features)
         card = deck.create_card({})  # No value provided
-        
+
         assert isinstance(card, Card)
         assert len(card._elements) == 0  # No default, so no element
 
@@ -145,10 +143,10 @@ class Test_Deck:
         width = AbsoluteMeasure(100, MeasureUnit.MM)
         height = AbsoluteMeasure(150, MeasureUnit.MM)
         card_size = AbsoluteSize(width, height)
-        
+
         deck = Deck(card_size, {})
         card = Card(card_size, [])
-        
+
         deck.add_card(card)
         assert len(deck._cards) == 1
         assert deck._cards[0] == card
@@ -159,10 +157,10 @@ class Test_Deck:
         width = AbsoluteMeasure(100, MeasureUnit.MM)
         height = AbsoluteMeasure(150, MeasureUnit.MM)
         card_size = AbsoluteSize(width, height)
-        
+
         deck = Deck(card_size, {})
         card = Card(card_size, [])
-        
+
         deck.add_card(card, quantity=5)
         assert len(deck._cards) == 1
         assert deck._cards_quantity[0] == 5
@@ -172,13 +170,13 @@ class Test_Deck:
         width = AbsoluteMeasure(100, MeasureUnit.MM)
         height = AbsoluteMeasure(150, MeasureUnit.MM)
         card_size = AbsoluteSize(width, height)
-        
+
         deck = Deck(card_size, {})
         card1 = Card(card_size, [])
         card2 = Card(card_size, [])
-        
+
         deck.add_card(card1, quantity=2)
         deck.add_card(card2, quantity=3)
-        
+
         assert len(deck._cards) == 2
         assert deck._cards_quantity == [2, 3]

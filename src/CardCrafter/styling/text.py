@@ -5,15 +5,16 @@ This module provides enumerations and classes for configuring text appearance,
 including alignment, formatting, font properties, and colors.
 """
 
-from enum import Enum
 from dataclasses import dataclass
+from enum import Enum
 
 from CardCrafter.styling.color import Color
+
 
 class TextAlignment(Enum):
     """
     Enumeration of text alignment options.
-    
+
     Attributes:
         LEFT: Align text to the left.
         CENTER: Center the text.
@@ -26,7 +27,7 @@ class TextAlignment(Enum):
 class TextFormatting(Enum):
     """
     Enumeration of text formatting options.
-    
+
     Attributes:
         PLAIN: Plain text without any formatting.
         MARKDOWN: Text formatted using Markdown syntax.
@@ -39,7 +40,7 @@ class TextFormatting(Enum):
 class TextStyle:
     """
     Represents the styling options for a text element.
-    
+
     Attributes:
         alignment: The horizontal alignment of the text (default: LEFT).
         formatting: The text formatting type (default: PLAIN).
